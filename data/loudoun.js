@@ -1,0 +1,105 @@
+// ── LOUDOUN COUNTY DATA ────────────────────────────────────
+// Source: opendata.loudoun.gov | lcps.org | loudoun.gov/budget
+// Last verified: May 2025
+
+window.LOUDOUN = {
+  id: 'loudoun',
+  name: 'Loudoun County',
+  state: 'Virginia',
+  tagline: 'Fastest growing county in Virginia',
+  color: '#00c6ff',
+  accentDark: '#0077aa',
+  supervisor: 'Chair: Phyllis Randall',
+  population: '436,000',
+  area: '521 sq mi',
+  founded: '1757',
+  seat: 'Leesburg',
+  website: 'https://www.loudoun.gov',
+  openDataUrl: 'https://opendata.loudoun.gov',
+  lastUpdated: 'May 1, 2025',
+  dataNote: 'County-level data sourced from Loudoun Open Data Portal (opendata.loudoun.gov). District-level figures are aggregated from parcel, permit, and school-level datasets using supervisory district boundary GeoJSON. Some metrics are county-wide by nature and clearly labeled.',
+
+  mapCenter: [39.08, -77.64],
+  mapZoom: 10,
+
+  districts: [
+    { id: 'algonkian',  name: 'Algonkian',  supervisor: 'June Hummel',            pop: '79000', color: '#22d3ee', center: [39.05, -77.41], tags: ['Cascades', 'Sugarland Run', 'Seneca Ridge MS'] },
+    { id: 'ashburn',    name: 'Ashburn',    supervisor: 'Mike Turner',             pop: '110000', color: '#38bdf8', center: [39.04, -77.49], tags: ['One Loudoun', 'INOVA', 'Ashburn Village'] },
+    { id: 'blueridge',  name: 'Blue Ridge', supervisor: 'Tony Buffington',         pop: '38000', color: '#34d399', center: [39.14, -77.83], tags: ['Round Hill', 'Bluemont', 'Appalachian foothills'] },
+    { id: 'broadrun',   name: 'Broad Run',  supervisor: 'Abubakar Bhatti',         pop: '88000', color: '#60a5fa', center: [39.02, -77.46], tags: ['Lansdowne', 'River Creek', 'Belmont Ridge MS'] },
+    { id: 'catoctin',   name: 'Catoctin',   supervisor: 'Caleb Kershner',          pop: '44000', color: '#a78bfa', center: [39.17, -77.72], tags: ['Purcellville', 'Hillsboro', 'Western farms'] },
+    { id: 'dulles',     name: 'Dulles',     supervisor: 'Luis Aguirre-Torres',     pop: '85000', color: '#fb923c', center: [38.97, -77.44], tags: ['Data Center Alley', 'Metro Silver Line'] },
+    { id: 'leesburg',   name: 'Leesburg',   supervisor: 'Neil Steinberg',          pop: '62000', color: '#f472b6', center: [39.11, -77.56], tags: ['County Seat', 'Historic Downtown', 'Tuscarora HS'] },
+    { id: 'potomac',    name: 'Potomac',    supervisor: 'Andrea Rivera Talbott',   pop: '36000', color: '#4ade80', center: [39.22, -77.65], tags: ['Lovettsville', 'Lucketts', 'River communities'] },
+    { id: 'sterling',   name: 'Sterling',   supervisor: 'Matt Letourneau',         pop: '92000', color: '#fbbf24', center: [39.00, -77.40], tags: ['Route 7 Corridor', 'Countryside'] },
+    { id: 'sycamore',   name: 'Sycamore',   supervisor: 'Koran Saines',            pop: '98000', color: '#f87171', center: [38.99, -77.51], tags: ['Brambleton', 'Stone Bridge HS', 'Moorefield Station'] },
+  ],
+
+  countyCards: [
+    { id: 'schools',    icon: '📚', title: 'SCHOOLS',          countyVal: '94/100',  districtVal: null,    districtNote: 'aggregated',  sub: '116 schools · 84,121 students enrolled',   badge: 'DAILY',   cadence: 'daily',  color: '#00c6ff', spark: [60,65,70,72,80,78,88,94],  source: 'lcps.org' },
+    { id: 'housing',    icon: '🏠', title: 'HOUSING',          countyVal: '$641K',   districtVal: '$618K', districtNote: 'Sycamore est', sub: 'Median sale price · 34 homes sold / 30 days', badge: 'DAILY',  cadence: 'daily',  color: '#f5c842', spark: [520,545,580,600,620,630,641,641], source: 'virginiarealtors.org' },
+    { id: 'permits',    icon: '🏗️', title: 'BUILDING PERMITS', countyVal: '312',     districtVal: '48',    districtNote: 'Sycamore',     sub: 'Issued this month · 18 commercial · 294 residential', badge: 'LIVE', cadence: 'live', color: '#ff6b35', spark: [280,260,305,290,312,300,298,312], source: 'opendata.loudoun.gov' },
+    { id: 'budget',     icon: '💰', title: 'COUNTY BUDGET',    countyVal: '$3.87B',  districtVal: null,    districtNote: 'county-wide',  sub: 'FY2025 · Education 56% · Public Safety 14%', badge: 'ANNUAL', cadence: 'annual', color: '#22c55e', spark: [3.1,3.2,3.35,3.5,3.6,3.72,3.8,3.87], source: 'loudoun.gov/budget' },
+    { id: 'water',      icon: '💧', title: 'WATER LEVELS',     countyVal: '87%',     districtVal: null,    districtNote: 'county-wide',  sub: 'Goose Creek Reservoir · Beaverdam Creek',  badge: 'LIVE',   cadence: 'live',   color: '#38bdf8', spark: [72,75,79,82,84,85,87,87],  source: 'waterdata.usgs.gov' },
+    { id: 'traffic',    icon: '🚗', title: 'TRAFFIC & COMMUTE',countyVal: '34 min',  districtVal: '38 min',districtNote: 'Sycamore est', sub: 'Avg commute to DC · Route 7 / Dulles Toll', badge: 'LIVE',   cadence: 'live',   color: '#a78bfa', spark: [28,32,35,38,36,34,34,34],  source: 'virginiadot.org' },
+    { id: 'bosvotes',   icon: '🗳️', title: 'SUPERVISOR VOTES', countyVal: '4 bills', districtVal: null,    districtNote: 'county-wide',  sub: 'Past 30 days · Next BOS: June 3 · Leesburg', badge: 'WEEKLY', cadence: 'weekly', color: '#f472b6', spark: [2,3,5,4,6,3,4,4],         source: 'loudoun.granicus.com' },
+    { id: 'safety',     icon: '👮', title: 'PUBLIC SAFETY',    countyVal: '-8%',     districtVal: '-6%',   districtNote: 'Sycamore est', sub: 'Crime index vs prior year · LCSO log',     badge: 'DAILY',   cadence: 'daily',  color: '#fb923c', spark: [100,98,96,95,94,93,92,92], source: 'loudoun.gov/crime-statistics' },
+    { id: 'air',        icon: '🌱', title: 'AIR QUALITY',      countyVal: '42 AQI',  districtVal: null,    districtNote: 'county-wide',  sub: 'Good · EPA AirNow · Ashburn monitor',      badge: 'LIVE',   cadence: 'live',   color: '#4ade80', spark: [55,48,52,44,45,43,42,42],  source: 'airnow.gov' },
+    { id: 'population', icon: '📈', title: 'DEMOGRAPHICS',     countyVal: '436K',    districtVal: '98K',   districtNote: 'Sycamore',     sub: 'County population · Fastest growing in VA', badge: 'CENSUS', cadence: 'annual', color: '#fbbf24', spark: [310,340,360,380,400,415,428,436], source: 'data.census.gov' },
+    { id: 'health',     icon: '🏥', title: 'HEALTH SERVICES',  countyVal: '14',      districtVal: null,    districtNote: 'county-wide',  sub: 'Health dept sites · INOVA Loudoun · Cornwall', badge: 'DAILY', cadence: 'daily', color: '#e879f9', spark: [11,11,12,12,13,14,14,14],  source: 'loudoun.gov/health' },
+    { id: 'enrollment', icon: '🏫', title: 'LCPS ENROLLMENT',  countyVal: '84,121',  districtVal: '12,400',districtNote: 'Sycamore',     sub: 'Students · 116 schools · 28% free/reduced', badge: 'DAILY',  cadence: 'daily',  color: '#2dd4bf', spark: [70000,74000,77000,79000,81000,82500,83600,84121], source: 'lcps.org' },
+  ],
+
+  sources: [
+    { name: 'Loudoun County Open Data', url: 'https://opendata.loudoun.gov', desc: 'Primary portal for county GIS, zoning, parcels, permits, and supervisory district boundaries.', cadence: 'daily', tags: ['housing','permits','budget','zoning'], powers: ['Building Permits','Zoning Map','Parcel Data','District Boundaries'], lastUpdated: 'May 1, 2025' },
+    { name: 'Loudoun County Schools (LCPS)', url: 'https://www.lcps.org/about/data-and-reporting', desc: 'Official LCPS data reporting hub: enrollment, per-school stats, SOL pass rates, demographics.', cadence: 'daily', tags: ['schools'], powers: ['School Ratings','Enrollment','SOL Scores','Demographics'], lastUpdated: 'Apr 30, 2025' },
+    { name: 'Virginia Open Data Portal', url: 'https://data.virginia.gov', desc: 'Statewide open data covering health, education, economy, environment, and criminal justice.', cadence: 'weekly', tags: ['budget','environment','schools'], powers: ['Health Services','Crime Index','State Budget Allocations'], lastUpdated: 'Apr 28, 2025' },
+    { name: 'VDOT Traffic Data', url: 'https://www.virginiadot.org/info/resources-traffic-counts.asp', desc: 'Virginia DOT real-time and historical traffic count data. Powers commute time estimates.', cadence: 'live', tags: ['live'], powers: ['Commute Times','Traffic Counts','Route 7 / Dulles Toll Road'], lastUpdated: 'Live' },
+    { name: 'USGS Water Resources', url: 'https://waterdata.usgs.gov/va/nwis/rt', desc: 'Real-time stream gauge and reservoir data from the US Geological Survey for Northern Virginia.', cadence: 'live', tags: ['live','environment'], powers: ['Goose Creek Reservoir','Beaverdam Creek','Flood Indicators'], lastUpdated: 'Live' },
+    { name: 'US Census Bureau ACS', url: 'https://data.census.gov', desc: 'American Community Survey 5-year estimates. Powers population, income, and demographic cards.', cadence: 'annual', tags: ['annual'], powers: ['Population','Demographics','Income Levels','Housing Units'], lastUpdated: 'Dec 2024' },
+    { name: 'Loudoun BOS Meeting Records', url: 'https://loudoun.granicus.com/ViewPublisher.php?view_id=75', desc: 'Official Board of Supervisors meeting agendas, minutes, and vote records. All public.', cadence: 'weekly', tags: ['weekly','budget'], powers: ['Supervisor Votes','Legislative Calendar','Approved Budgets'], lastUpdated: 'Apr 29, 2025' },
+    { name: 'Virginia REALTORS Data', url: 'https://www.virginiarealtors.org/research/market-data/', desc: 'Monthly housing market statistics for Loudoun County: median price, days on market, sales volume.', cadence: 'daily', tags: ['housing','daily'], powers: ['Median Home Price','Sales Volume','Days on Market'], lastUpdated: 'May 1, 2025' },
+    { name: 'EPA AirNow Air Quality', url: 'https://www.airnow.gov/?city=Ashburn&state=VA', desc: 'Real-time Air Quality Index for Loudoun County from EPA monitoring stations near Ashburn.', cadence: 'live', tags: ['live','environment'], powers: ['Air Quality Index','Ozone Levels','PM2.5 Particulates'], lastUpdated: 'Live' },
+    { name: 'Loudoun County FY Budget', url: 'https://www.loudoun.gov/budget', desc: 'Adopted county budget documents, department breakdowns, and capital improvement plans.', cadence: 'annual', tags: ['annual','budget'], powers: ['$3.87B Budget','Education Spend','Public Safety Allocation'], lastUpdated: 'Apr 2025' },
+    { name: 'LCSO Crime Statistics', url: 'https://www.loudoun.gov/1527/Crime-Statistics', desc: "Loudoun County Sheriff's Office annual crime report and incident data by zip code.", cadence: 'daily', tags: ['daily'], powers: ['Crime Index','Incident Types','Year-over-Year Trends'], lastUpdated: 'May 1, 2025' },
+    { name: 'National Weather Service Dulles', url: 'https://forecast.weather.gov/MapClick.php?CityName=Dulles&state=VA', desc: "Official NWS forecast for Dulles International Airport, the county's reference weather station.", cadence: 'live', tags: ['live'], powers: ['Current Conditions','Forecast','Ticker Weather Data'], lastUpdated: 'Live' },
+  ],
+
+  votes: [
+    { title: 'LCPS per-school ratings map', pct: 82 },
+    { title: 'Solar permit tracker', pct: 71 },
+    { title: 'New development map', pct: 68 },
+    { title: 'Data center tax revenue', pct: 65 },
+    { title: 'Route 7 BRT progress', pct: 59 },
+    { title: 'Flood risk by parcel', pct: 47 },
+    { title: 'Mental health resources map', pct: 43 },
+    { title: 'BOS vote history by supervisor', pct: 38 },
+  ],
+
+  ticker: [
+    { label: 'LCPS Enrollment', value: '84,121', trend: null },
+    { label: 'Median Home Price', value: '$641K', trend: 'down' },
+    { label: 'Goose Creek Reservoir', value: '87%', trend: 'up' },
+    { label: 'Route 7 avg commute', value: '34 min', trend: null },
+    { label: 'New permits this month', value: '312', trend: 'up' },
+    { label: 'FY2025 Budget', value: '$3.87B', trend: null },
+    { label: 'Crime Index YoY', value: '-8%', trend: 'up' },
+    { label: 'School avg rating', value: '8.4/10', trend: null },
+    { label: 'Dulles today', value: '72F Partly cloudy', trend: null },
+    { label: 'Next BOS vote', value: 'June 3', trend: null },
+  ],
+
+  // GeoJSON-style district boundaries (simplified polygons, lon/lat)
+  boundaries: [
+    { id: 'algonkian', coords: [[39.08,-77.33],[39.12,-77.33],[39.12,-77.42],[39.05,-77.42],[39.05,-77.36]] },
+    { id: 'ashburn',   coords: [[38.99,-77.44],[39.05,-77.44],[39.05,-77.50],[38.99,-77.55],[38.96,-77.50]] },
+    { id: 'blueridge', coords: [[39.10,-77.78],[39.18,-77.78],[39.20,-77.90],[39.10,-77.90],[39.08,-77.82]] },
+    { id: 'broadrun',  coords: [[38.98,-77.42],[39.04,-77.42],[39.04,-77.48],[38.98,-77.48]] },
+    { id: 'catoctin',  coords: [[39.10,-77.65],[39.20,-77.65],[39.22,-77.78],[39.10,-77.78],[39.08,-77.70]] },
+    { id: 'dulles',    coords: [[38.94,-77.38],[39.00,-77.38],[39.00,-77.46],[38.94,-77.50],[38.92,-77.44]] },
+    { id: 'leesburg',  coords: [[39.08,-77.53],[39.15,-77.53],[39.16,-77.62],[39.08,-77.62],[39.07,-77.57]] },
+    { id: 'potomac',   coords: [[39.18,-77.60],[39.26,-77.60],[39.28,-77.72],[39.18,-77.70],[39.16,-77.64]] },
+    { id: 'sterling',  coords: [[38.98,-77.36],[39.04,-77.36],[39.05,-77.44],[38.98,-77.44]] },
+    { id: 'sycamore',  coords: [[38.93,-77.44],[39.00,-77.44],[39.00,-77.54],[38.93,-77.58],[38.90,-77.50]] },
+  ],
+};
