@@ -947,3 +947,113 @@ footer {
   nav { padding: 0 12px; gap: 10px; }
   .nav-links { gap: 10px; }
 }
+
+/* -- MAP DISTRICT LABELS (divIcon) ------------------------------ */
+.map-district-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.12em;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow:
+    0 1px 3px rgba(0,0,0,0.9),
+    0 0 8px rgba(0,0,0,0.8);
+  transition: color 0.2s;
+  line-height: 22px;
+}
+
+.map-district-label.active {
+  color: var(--accent);
+  text-shadow:
+    0 0 12px rgba(0,198,255,0.6),
+    0 1px 3px rgba(0,0,0,0.9);
+}
+
+/* -- MAP RICH TOOLTIP ------------------------------------------- */
+.map-tt-wrap {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.map-tt-wrap .leaflet-popup-content-wrapper,
+.leaflet-tooltip.map-tt-wrap {
+  background: rgba(15,21,32,0.97) !important;
+  border: 1px solid var(--border, #1e2d45) !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.7) !important;
+  color: var(--text, #e8edf4) !important;
+}
+
+.map-tt-wrap::before {
+  border-top-color: #1e2d45 !important;
+}
+
+.map-tt {
+  padding: 12px 14px;
+  min-width: 180px;
+}
+
+.map-tt-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent, #00c6ff);
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+
+.map-tt-sup {
+  font-size: 10px;
+  color: rgba(107,127,163,0.9);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.map-tt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.map-tt-row span {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(107,127,163,0.8);
+  letter-spacing: 0.04em;
+}
+
+.map-tt-row strong {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: #e8edf4;
+  font-weight: 700;
+}
+
+.map-tt-hint {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(30,45,69,0.8);
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: var(--accent, #00c6ff);
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+/* -- MAP HEIGHT FIX --------------------------------------------- */
+#map {
+  height: 480px;
+}
+
+@media (max-width: 640px) {
+  #map { height: 340px; }
+  .map-district-label { font-size: 8px; letter-spacing: 0.08em; }
+}
