@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nova Civic — Northern Virginia Transparency Platform</title>
+<meta name="description" content="Real-time civic data for Loudoun and Fairfax counties. Schools, housing, permits, budget, water levels, and more. Free. Open source. No spin."/>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600;900&display=swap" rel="stylesheet"/>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<!-- App CSS -->
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────────── -->
+<nav>
+  <span class="nav-brand">NOVA CIVIC</span>
+  <span class="nav-live">● LIVE</span>
+  <div class="nav-links">
+    <a class="nav-link" href="#map-section">MAP</a>
+    <a class="nav-link" href="#dashboards">DATA</a>
+    <a class="nav-link" href="#sources">SOURCES</a>
+    <a class="nav-link" href="#vote">VOTE</a>
+    <a class="nav-link" href="#about">ABOUT</a>
+  </div>
+</nav>
+
+<!-- ── COUNTY SWITCHER ─────────────────────────────────── -->
+<div class="county-switcher">
+  <button class="county-tab active" data-county="loudoun" onclick="App.switchCounty('loudoun')">
+    <span class="county-tab-dot"></span>
+    LOUDOUN COUNTY
+  </button>
+  <button class="county-tab" data-county="fairfax" onclick="App.switchCounty('fairfax')">
+    <span class="county-tab-dot"></span>
+    FAIRFAX COUNTY
+  </button>
+</div>
+
+<!-- ── FRESHNESS BANNER ─────────────────────────────────── -->
+<div class="freshness-bar" id="freshnessBar">
+  <!-- Rendered by JS -->
+</div>
+
+<!-- ── TICKER ───────────────────────────────────────────── -->
+<div class="ticker-wrap">
+  <div class="ticker-label" id="tickerLabel">LOUDOUN</div>
+  <div class="ticker-track">
+    <div class="ticker-scroll" id="tickerScroll"></div>
+  </div>
+</div>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-eyebrow" id="heroEyebrow">LOUDOUN COUNTY, VIRGINIA</div>
+  <div class="hero-badge">📍 <span id="heroBadge">Leesburg, VA · Pop. 436,000</span></div>
+  <h1>Your County.<br/><em>Your Data.</em><br/>Your Right.</h1>
+  <p class="hero-sub" id="heroSub">
+    Fastest growing county in Virginia. <strong>Real data. Zero spin. Free forever.</strong>
+  </p>
+
+  <div class="stats-row">
+    <div class="stat-item">
+      <span class="stat-num" id="s1">0</span>
+      <span class="stat-label">Districts</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="s2">0</span>
+      <span class="stat-label">Dashboards</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="s3">0</span>
+      <span class="stat-label">Data Points</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="s4">0</span>
+      <span class="stat-label">Open Sources</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── MAP ──────────────────────────────────────────────── -->
+<section class="map-section" id="map-section">
+  <div class="section-header">
+    <span class="section-title">INTERACTIVE MAP</span>
+    <div class="section-line"></div>
+    <span class="section-title">CLICK A DISTRICT</span>
+  </div>
+  <div id="map"></div>
+  <p class="map-hint">Click any district polygon to load its data below. Scroll to zoom.</p>
+  <div class="district-chips" id="districtChips"></div>
+</section>
+
+<!-- ── DATA DISCLAIMER ──────────────────────────────────── -->
+<div class="data-disclaimer">
+  <div id="dataDisclaimer"></div>
+</div>
+
+<!-- ── DASHBOARDS ────────────────────────────────────────── -->
+<section class="dashboard-section" id="dashboards">
+  <div class="section-header">
+    <span class="section-title" id="dashTitle">DISTRICT DASHBOARDS</span>
+    <div class="section-line"></div>
+    <span class="section-title">OPEN DATA</span>
+  </div>
+
+  <div id="districtHeader" class="district-header">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- County / District scope toggle -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+    <div class="scope-toggle">
+      <button class="scope-btn active" data-scope="county" onclick="App.setScope('county')">COUNTY</button>
+      <button class="scope-btn" data-scope="district" onclick="App.setScope('district')">DISTRICT</button>
+    </div>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.06em;">
+      Toggle between county-wide figures and district-level estimates
+    </span>
+  </div>
+
+  <div class="dashboard-grid" id="dashGrid"></div>
+</section>
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────── -->
+<section class="how-section">
+  <div class="section-header">
+    <span class="section-title">HOW IT WORKS</span>
+    <div class="section-line"></div>
+    <span class="section-title">OPEN SOURCE</span>
+  </div>
+  <div class="how-grid">
+    <div class="how-card">
+      <span class="how-num">01</span>
+      <span class="how-icon">📡</span>
+      <div class="how-title">WE COLLECT</div>
+      <div class="how-body">Data pulled from official county open data portals, VDOT, USGS, EPA, and Census Bureau. Updated every 15 to 60 minutes. Every figure traces back to a public source URL.</div>
+    </div>
+    <div class="how-card">
+      <span class="how-num">02</span>
+      <span class="how-icon">📊</span>
+      <div class="how-title">WE ORGANIZE</div>
+      <div class="how-body">Parsed into dashboards per district covering schools, permits, housing, budget, water, traffic, supervisor votes, crime, air quality, and demographics. County vs district toggle on every card.</div>
+    </div>
+    <div class="how-card">
+      <span class="how-num">03</span>
+      <span class="how-icon">👁️</span>
+      <div class="how-title">YOU SEE</div>
+      <div class="how-body">Real-time county and district data. Free. Open source. No ads, no spin. Built by a Brambleton resident who was tired of digging through 12 different government portals to find basic facts.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOURCES ───────────────────────────────────────────── -->
+<section class="sources-section" id="sources">
+  <div class="section-header">
+    <span class="section-title">DATA SOURCES</span>
+    <div class="section-line"></div>
+    <span class="section-title">FULL TRANSPARENCY</span>
+  </div>
+
+  <div class="sources-intro">
+    <div class="sources-intro-text">
+      Every number on this site traces back to a <strong>public government record</strong>.
+      No estimates without labeling. No spin. Click any source to open the original portal.
+      If you spot a discrepancy, <a href="mailto:hello@novacivic.org">flag it</a>.
+    </div>
+    <div class="sources-count" id="sourcesCount">12 SOURCES</div>
+  </div>
+
+  <div class="sources-filter-row">
+    <button class="filter-btn active" onclick="App.filterSources('all', this)">ALL</button>
+    <button class="filter-btn" onclick="App.filterSources('live', this)">LIVE</button>
+    <button class="filter-btn" onclick="App.filterSources('daily', this)">DAILY</button>
+    <button class="filter-btn" onclick="App.filterSources('weekly', this)">WEEKLY</button>
+    <button class="filter-btn" onclick="App.filterSources('annual', this)">ANNUAL</button>
+    <button class="filter-btn" onclick="App.filterSources('schools', this)">SCHOOLS</button>
+    <button class="filter-btn" onclick="App.filterSources('housing', this)">HOUSING</button>
+    <button class="filter-btn" onclick="App.filterSources('budget', this)">BUDGET</button>
+    <button class="filter-btn" onclick="App.filterSources('environment', this)">ENV</button>
+  </div>
+
+  <div class="sources-grid" id="sourcesGrid"></div>
+</section>
+
+<!-- ── VOTE ─────────────────────────────────────────────── -->
+<section class="vote-section" id="vote">
+  <div class="section-header">
+    <span class="section-title">VOTE ON WHAT WE BUILD NEXT</span>
+    <div class="section-line"></div>
+    <span class="section-title">COMMUNITY</span>
+  </div>
+  <div class="vote-grid" id="voteGrid"></div>
+</section>
+
+<!-- ── CTA ──────────────────────────────────────────────── -->
+<section class="cta-section" id="about">
+  <div class="cta-box">
+    <div class="cta-title">Built by a resident.<br/>For every resident.</div>
+    <p class="cta-sub">
+      Started by one person in Brambleton, VA who wanted real answers about their county
+      without reading 14 government PDFs. Now covering two counties and growing.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="https://github.com" target="_blank">Star on GitHub</a>
+      <a class="btn btn-ghost" href="#vote">Vote on Features</a>
+      <a class="btn btn-ghost" href="mailto:hello@novacivic.org">Contribute Data</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-disclaimer">
+    INDEPENDENT · NOT AN OFFICIAL GOVERNMENT WEBSITE · DATA SOURCED FROM PUBLIC RECORDS · NOVA CIVIC
+  </div>
+  <div class="footer-links">
+    <a class="footer-link" href="#about">About</a>
+    <a class="footer-link" href="#sources">Sources</a>
+    <a class="footer-link" href="#">Privacy</a>
+    <a class="footer-link" href="#">Disclaimer</a>
+    <a class="footer-link" href="#">GitHub</a>
+    <a class="footer-link" href="mailto:hello@novacivic.org">Contact</a>
+  </div>
+  <div class="footer-built">Built by a Brambleton resident · Loudoun + Fairfax · Updated May 2025</div>
+</footer>
+
+<!-- ── SCRIPTS ───────────────────────────────────────────── -->
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Data files -->
+<script src="data/loudoun.js"></script>
+<script src="data/fairfax.js"></script>
+
+<!-- App modules (order matters) -->
+<script src="js/map.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
