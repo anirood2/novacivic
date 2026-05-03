@@ -7,7 +7,7 @@ var NovaCivicAPI = (function () {
   // ── WMATA key placeholder ─────────────────────────────────
   // Replace the string below with your WMATA primary key
   // before pushing to GitHub. Never commit a real key to a public repo.
-  var WMATA_KEY = 'f22e7e9d5f4b42569d3c369cf9e4f1e6';
+  var WMATA_KEY = 'YOUR_WMATA_PRIMARY_KEY_HERE';
 
   // Loudoun Silver Line station codes
   var LOUDOUN_STATIONS = [
@@ -246,6 +246,33 @@ var NovaCivicAPI = (function () {
     }
   }
 
+  // ── Dominion Energy Outages ───────────────────────────────
+  async function fetchOutages(countyId) {
+    try {
+      var url = 'https://outagemap.dominionenergy.com/resources/data/interval_generation_data/external/report.json';
+      var res = await fetch(url);
+      if (!res.ok) throw new Error('Dominion ' + res.status);
+      var data = await res.json();
+      var total = 0;
+      if (data && data.file_data && data.file_data.areas) {
+        var va = data.file_data.areas.find(function(a) {
+          return a.name && a.name.toUpperCase().indexOf('VIRGINIA') !== -1;
+        });
+        if (va && va.cust_a) total = va.cust_a.val || 0;
+      }
+      return {
+        value: total > 0 ? total.toLocaleString() + ' affected' : '0 reported',
+        total: total,
+        timestamp: now(),
+        source: 'Dominion Energy',
+        ok: true,
+      };
+    } catch (e) {
+      console.warn('Dominion fetch failed:', e.message);
+      return { value: 'Check map', total: 0, timestamp: now(), source: 'Dominion Energy', ok: false };
+    }
+  }
+
   // ── Load all live data for a county ──────────────────────
   async function loadAll(countyId) {
     var stations = countyId === 'loudoun' ? LOUDOUN_STATIONS : FAIRFAX_STATIONS;
@@ -255,6 +282,7 @@ var NovaCivicAPI = (function () {
       fetchWaterLevel(countyId),
       fetchPermits(countyId),
       fetchIncidents(),
+      fetchOutages(countyId),
     ]);
 
     return {
@@ -263,6 +291,7 @@ var NovaCivicAPI = (function () {
       water:    results[2].status === 'fulfilled' ? results[2].value : failResult('USGS'),
       permits:  results[3].status === 'fulfilled' ? results[3].value : failResult('Open Data'),
       incidents:results[4].status === 'fulfilled' ? results[4].value : { incidents: [], ok: false },
+      outages:  results[5].status === 'fulfilled' ? results[5].value : { value: 'Check map', ok: false },
       stations: stations,
       loadedAt: now(),
     };
