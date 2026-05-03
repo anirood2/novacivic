@@ -1276,3 +1276,198 @@ footer {
   #map { height: 340px; }
   .map-dlabel { font-size: 8px; }
 }
+
+/* == SECTION WRAPPER ========================================= */
+.section-wrap {
+  position: relative; z-index: 1;
+  max-width: 1140px; margin: 0 auto;
+  padding: 0 20px 56px;
+}
+
+/* == LEGEND BADGES =========================================== */
+.legend-badge {
+  font-family: var(--mono); font-size: 9px;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid transparent;
+  letter-spacing: 0.04em;
+}
+
+/* == LOCAL ALERTS ============================================ */
+.alerts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.alert-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+  border-left: 3px solid var(--accent);
+}
+.alert-card:hover { background: var(--surface2); transform: translateY(-1px); }
+.alert-card.alert-warn { border-left-color: #f87171; }
+.alert-card.alert-info { border-left-color: var(--accent); }
+
+.alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.alert-title { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.alert-desc  { font-size: 11px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; }
+.alert-source { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.06em; }
+
+/* == LEADERSHIP ============================================== */
+.leaders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.leader-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px;
+  transition: background 0.2s;
+}
+.leader-card:hover { background: var(--surface2); }
+
+.leader-role { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 6px; }
+.leader-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.leader-party {
+  font-family: var(--mono); font-size: 9px; padding: 1px 5px;
+  border-radius: 2px; font-weight: 700;
+}
+.party-d { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.party-r { background: rgba(239,68,68,0.15); color: #f87171; }
+.leader-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+.leader-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.leader-link {
+  font-family: var(--mono); font-size: 9px; color: var(--accent);
+  text-decoration: none; letter-spacing: 0.05em; transition: opacity 0.2s;
+}
+.leader-link:hover { opacity: 0.7; }
+
+/* == ELECTIONS BOX =========================================== */
+.elections-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.elections-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.elections-item:last-child { border-bottom: none; }
+.elections-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+.elections-val { font-family: var(--mono); font-size: 11px; color: var(--text); font-weight: 700; text-align: right; }
+.elections-val a { color: var(--accent); text-decoration: none; }
+
+/* == SERVICES DIRECTORY ====================================== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.service-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 12px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.service-card:hover { background: var(--surface2); border-color: var(--accent); transform: translateY(-1px); }
+
+.service-icon { font-size: 22px; }
+.service-name { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--text); }
+.service-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+/* == ASSISTANCE PROGRAMS ===================================== */
+.schemes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+.scheme-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.scheme-card:hover { background: var(--surface2); border-color: var(--accent); transform: translateY(-1px); }
+
+.scheme-name { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent); }
+.scheme-desc { font-size: 12px; color: var(--text); line-height: 1.5; }
+.scheme-eligibility { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.04em; margin-top: 2px; }
+
+/* == DATA PLEDGE ============================================= */
+.data-pledge-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.pledge-stats {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.pledge-stat {
+  flex: 1;
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.pledge-stat:last-child { border-right: none; }
+
+.pledge-num {
+  display: block;
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  transition: color 0.4s;
+}
+
+.pledge-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.pledge-box {
+  padding: 16px 20px;
+}
+
+.pledge-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.pledge-text {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
