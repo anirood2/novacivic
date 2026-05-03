@@ -1057,3 +1057,222 @@ footer {
   #map { height: 340px; }
   .map-district-label { font-size: 8px; letter-spacing: 0.08em; }
 }
+
+/* == HONEST TIER BADGES ====================================== */
+.badge-live      { background: rgba(34,197,94,0.12);  color: #22c55e; border: 1px solid rgba(34,197,94,0.3);  }
+.badge-today     { background: rgba(0,198,255,0.08);  color: #00c6ff; border: 1px solid rgba(0,198,255,0.2); }
+.badge-published { background: rgba(107,127,163,0.1); color: #6b7fa3; border: 1px solid rgba(107,127,163,0.2); font-size: 7px; }
+
+/* Remove old conflicting badge classes */
+.badge-daily, .badge-weekly, .badge-annual { display: none; }
+
+/* == LOADING CARD STATE ====================================== */
+.dash-card.loading .card-value { opacity: 0.3; animation: pulse 1.4s infinite; }
+@keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.7} }
+
+/* == CARD SOURCE LINK ======================================== */
+.card-source {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--muted);
+  opacity: 0.5;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s;
+}
+.card-source:hover { opacity: 1; color: var(--accent); }
+
+/* == INCIDENTS BANNER ======================================== */
+.incidents-banner {
+  display: none;
+  position: relative; z-index: 1;
+  background: rgba(248,113,113,0.08);
+  border-top: 1px solid rgba(248,113,113,0.3);
+  border-bottom: 1px solid rgba(248,113,113,0.3);
+  padding: 8px 20px;
+  flex-direction: column;
+  gap: 4px;
+}
+.incident-item {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #f87171;
+  letter-spacing: 0.04em;
+}
+
+/* == SOURCES: updated cadence badges ========================= */
+.cadence-live  { background: rgba(34,197,94,0.12);  color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+.cadence-today { background: rgba(0,198,255,0.08);  color: #00c6ff; border: 1px solid rgba(0,198,255,0.2); }
+.cadence-pub   { background: rgba(107,127,163,0.08);color: #6b7fa3; border: 1px solid rgba(107,127,163,0.15); }
+
+/* == WMATA STATION MARKERS =================================== */
+.map-station-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.map-station-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #b5a3e8;
+  border: 2px solid #fff;
+  box-shadow: 0 0 8px rgba(181,163,232,0.8), 0 0 16px rgba(181,163,232,0.4);
+  animation: station-pulse 2.5s infinite;
+}
+@keyframes station-pulse {
+  0%,100% { box-shadow: 0 0 8px rgba(181,163,232,0.8), 0 0 16px rgba(181,163,232,0.4); }
+  50%      { box-shadow: 0 0 14px rgba(181,163,232,1),  0 0 28px rgba(181,163,232,0.6); }
+}
+.map-station-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: rgba(181,163,232,0.9);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+  white-space: nowrap;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+/* == STATION POPUP =========================================== */
+.station-popup-wrap .leaflet-popup-content-wrapper {
+  background: rgba(10,16,26,0.98) !important;
+  border: 1px solid rgba(181,163,232,0.4) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.8) !important;
+  padding: 0 !important;
+  color: #e8edf4 !important;
+}
+.station-popup-wrap .leaflet-popup-tip-container { display: none; }
+.station-popup-wrap .leaflet-popup-content { margin: 0 !important; }
+
+.map-station-popup { min-width: 220px; }
+
+.msp-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px 8px;
+  border-bottom: 1px solid rgba(181,163,232,0.15);
+}
+.msp-icon { font-size: 20px; }
+.msp-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  color: #b5a3e8;
+  letter-spacing: 0.04em;
+}
+.msp-line {
+  font-size: 10px; color: rgba(107,127,163,0.8);
+  font-family: 'Space Mono', monospace;
+  margin-top: 1px;
+}
+.msp-trains-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; letter-spacing: 0.15em;
+  color: rgba(107,127,163,0.7);
+  padding: 8px 14px 4px;
+}
+.msp-trains { padding: 0 14px 4px; }
+.msp-train {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(30,45,69,0.5);
+}
+.msp-train:last-child { border-bottom: none; }
+.msp-train-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.msp-train-line.sv { background: #009cde; color: #fff; }
+.msp-train-dest { font-size: 11px; color: #e8edf4; flex: 1; }
+.msp-train-min {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  color: #22c55e;
+  white-space: nowrap;
+}
+.msp-train-min.brd { color: #f97316; }
+.msp-train-min.arr { color: #fbbf24; }
+.msp-ts {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; color: rgba(107,127,163,0.6);
+  padding: 6px 14px 10px;
+  letter-spacing: 0.04em;
+}
+.msp-loading {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: rgba(107,127,163,0.7);
+  padding: 12px 14px;
+  animation: pulse 1.4s infinite;
+}
+.msp-no-key {
+  font-size: 10px; color: rgba(107,127,163,0.7);
+  padding: 10px 14px; line-height: 1.5;
+}
+.msp-no-trains {
+  font-size: 10px; color: rgba(107,127,163,0.7);
+  padding: 10px 14px; line-height: 1.5;
+}
+.msp-link { padding: 0 14px 12px; }
+.msp-link a {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; color: #b5a3e8;
+  text-decoration: none; letter-spacing: 0.06em;
+}
+.msp-link a:hover { text-decoration: underline; }
+
+/* == MAP DISTRICT LABELS ===================================== */
+.map-dlabel {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.12em;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.8);
+  line-height: 20px;
+  transition: color 0.2s;
+}
+.map-dlabel.active {
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(0,198,255,0.7), 0 1px 3px rgba(0,0,0,0.9);
+}
+
+/* == MAP RICH TOOLTIP ======================================== */
+.map-tt-wrap.leaflet-tooltip {
+  background: rgba(12,18,30,0.97) !important;
+  border: 1px solid #1e2d45 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.75) !important;
+  padding: 0 !important;
+  color: #e8edf4 !important;
+}
+.map-tt-wrap.leaflet-tooltip::before { border-top-color: #1e2d45 !important; }
+.map-tt { padding: 11px 14px; min-width: 170px; }
+.map-tt-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  color: var(--accent); letter-spacing: 0.04em; margin-bottom: 2px;
+}
+.map-tt-super { font-size: 10px; color: rgba(107,127,163,0.85); margin-bottom: 7px; font-style: italic; }
+.map-tt-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 3px; }
+.map-tt-row span { font-family: 'Space Mono', monospace; font-size: 9px; color: rgba(107,127,163,0.8); }
+.map-tt-row b   { font-family: 'Space Mono', monospace; font-size: 10px; color: #e8edf4; }
+.map-tt-cta {
+  margin-top: 7px; padding-top: 6px;
+  border-top: 1px solid rgba(30,45,69,0.8);
+  font-family: 'Space Mono', monospace;
+  font-size: 8px; color: var(--accent); letter-spacing: 0.08em; opacity: 0.8;
+}
+
+/* == MAP HEIGHT ============================================== */
+#map { height: 480px; }
+@media (max-width: 640px) {
+  #map { height: 340px; }
+  .map-dlabel { font-size: 8px; }
+}
