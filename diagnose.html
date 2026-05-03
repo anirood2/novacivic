@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nova Civic - Diagnostics</title>
+<style>
+  body { background: #080c10; color: #e8edf4; font-family: 'Courier New', monospace; padding: 20px; }
+  h2 { color: #00c6ff; margin-bottom: 16px; }
+  .step { padding: 10px 14px; margin: 6px 0; border-radius: 4px; font-size: 13px; }
+  .ok   { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #22c55e; }
+  .fail { background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.4); color: #f87171; }
+  .info { background: rgba(0,198,255,0.08); border: 1px solid rgba(0,198,255,0.2); color: #00c6ff; }
+  .warn { background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.2); color: #f5c842; }
+  pre  { white-space: pre-wrap; word-break: break-all; font-size: 11px; margin-top: 4px; opacity: 0.85; }
+</style>
+</head>
+<body>
+<h2>🔍 Nova Civic — Live Diagnostics</h2>
+<div id="log"></div>
+
+<script>
+var log = document.getElementById('log');
+
+function entry(msg, type, detail) {
+  var div = document.createElement('div');
+  div.className = 'step ' + (type || 'info');
+  div.innerHTML = msg + (detail ? '<pre>' + detail + '</pre>' : '');
+
+log.appendChild(div);
+}
+
+// Catch all uncaught errors
+window.onerror = function(msg, src, line, col, err) {
+entry(’UNCAUGHT ERROR in ’ + (src || ‘unknown’) + ’ line ’ + line, ‘fail’,
+msg + (err && err.stack ? ‘\n\n’ + err.stack : ‘’));
+return true;
+};
+
+window.addEventListener(‘unhandledrejection’, function(e) {
+entry(‘UNHANDLED PROMISE REJECTION’, ‘fail’,
+e.reason ? (e.reason.message || String(e.reason)) : ‘unknown’);
+});
+
+entry(‘Starting diagnostic checks…’, ‘info’);
+
+// Step 1: Check globals after each script loads
+function checkAfterLoad(name, checks) {
+var allOk = true;
+var results = [];
+checks.forEach(function(c) {
+try {
+var val = c.fn();
+results.push(‘OK: ’ + c.label + ’ = ’ + JSON.stringify(val).slice(0, 80));
+} catch(e) {
+results.push(‘FAIL: ’ + c.label + ’ threw: ’ + e.message);
+allOk = false;
+}
+});
+entry((allOk ? ‘✅’ : ‘❌’) + ’ ’ + name, allOk ? ‘ok’ : ‘fail’, results.join(’\n’));
+}
+</script>
+
+<!-- Load each script and check immediately after -->
+
+<script src="data/loudoun.js" onerror="entry('❌ FAILED TO LOAD: data/loudoun.js - file not found or parse error', 'fail')"></script>
+
+<script>
+try {
+  if (!window.LOUDOUN) throw new Error('window.LOUDOUN is undefined after loading loudoun.js');
+  checkAfterLoad('data/loudoun.js', [
+    { label: 'LOUDOUN.id',                fn: function(){ return window.LOUDOUN.id; } },
+    { label: 'districts.length',          fn: function(){ return window.LOUDOUN.districts.length; } },
+    { label: 'cards.length',              fn: function(){ return window.LOUDOUN.cards.length; } },
+    { label: 'boundaries.length',         fn: function(){ return window.LOUDOUN.boundaries.length; } },
+    { label: 'district[0].id',            fn: function(){ return window.LOUDOUN.districts[0].id; } },
+    { label: 'no blueridge district',     fn: function(){ var b = window.LOUDOUN.districts.find(function(d){ return d.id==='blueridge'; }); return b ? 'STILL HAS BLUERIDGE!' : 'clean'; } },
+    { label: 'has littleriver district',  fn: function(){ var b = window.LOUDOUN.districts.find(function(d){ return d.id==='littleriver'; }); return b ? b.supervisor : 'MISSING!'; } },
+    { label: 'sycamore exists',           fn: function(){ return !!window.LOUDOUN.districts.find(function(d){ return d.id==='sycamore'; }); } },
+    { label: 'budget card value',         fn: function(){ return window.LOUDOUN.cards.find(function(c){ return c.id==='budget'; }).countyVal; } },
+    { label: 'housing card value',        fn: function(){ return window.LOUDOUN.cards.find(function(c){ return c.id==='housing'; }).countyVal; } },
+    { label: 'population value',          fn: function(){ return window.LOUDOUN.population; } },
+  ]);
+} catch(e) { entry('❌ loudoun.js runtime check failed: ' + e.message, 'fail', e.stack); }
+</script>
+
+<script src="data/fairfax.js" onerror="entry('❌ FAILED TO LOAD: data/fairfax.js', 'fail')"></script>
+
+<script>
+try {
+  if (!window.FAIRFAX) throw new Error('window.FAIRFAX is undefined');
+  checkAfterLoad('data/fairfax.js', [
+    { label: 'FAIRFAX.id',        fn: function(){ return window.FAIRFAX.id; } },
+    { label: 'districts.length',  fn: function(){ return window.FAIRFAX.districts.length; } },
+    { label: 'cards.length',      fn: function(){ return window.FAIRFAX.cards.length; } },
+    { label: 'population',        fn: function(){ return window.FAIRFAX.population; } },
+    { label: 'housing value',     fn: function(){ return window.FAIRFAX.cards.find(function(c){ return c.id==='housing'; }).countyVal; } },
+  ]);
+} catch(e) { entry('❌ fairfax.js runtime check failed: ' + e.message, 'fail', e.stack); }
+</script>
+
+<script src="js/api.js" onerror="entry('❌ FAILED TO LOAD: js/api.js - THIS IS LIKELY THE PROBLEM', 'fail')"></script>
+
+<script>
+try {
+  if (!window.NovaCivicAPI) throw new Error('NovaCivicAPI is undefined after loading api.js');
+  checkAfterLoad('js/api.js', [
+    { label: 'NovaCivicAPI.loadAll',              fn: function(){ return typeof NovaCivicAPI.loadAll; } },
+    { label: 'NovaCivicAPI.fetchTrainPredictions',fn: function(){ return typeof NovaCivicAPI.fetchTrainPredictions; } },
+    { label: 'LOUDOUN_STATIONS.length',           fn: function(){ return NovaCivicAPI.LOUDOUN_STATIONS.length; } },
+    { label: 'FAIRFAX_STATIONS.length',           fn: function(){ return NovaCivicAPI.FAIRFAX_STATIONS.length; } },
+  ]);
+} catch(e) { entry('❌ api.js runtime check failed: ' + e.message, 'fail', e.stack); }
+</script>
+
+<script src="js/map.js" onerror="entry('❌ FAILED TO LOAD: js/map.js', 'fail')"></script>
+
+<script>
+try {
+  if (!window.NovaCivicMap) throw new Error('NovaCivicMap is undefined');
+  checkAfterLoad('js/map.js', [
+    { label: 'NovaCivicMap.init',            fn: function(){ return typeof NovaCivicMap.init; } },
+    { label: 'NovaCivicMap.drawDistricts',   fn: function(){ return typeof NovaCivicMap.drawDistricts; } },
+    { label: 'NovaCivicMap.highlightDistrict', fn: function(){ return typeof NovaCivicMap.highlightDistrict; } },
+  ]);
+} catch(e) { entry('❌ map.js runtime check failed: ' + e.message, 'fail', e.stack); }
+</script>
+
+<script src="js/render.js" onerror="entry('❌ FAILED TO LOAD: js/render.js', 'fail')"></script>
+
+<script>
+try {
+  if (!window.NovaCivicRender) throw new Error('NovaCivicRender is undefined');
+  checkAfterLoad('js/render.js', [
+    { label: 'renderCards',  fn: function(){ return typeof NovaCivicRender.renderCards; } },
+    { label: 'renderTicker', fn: function(){ return typeof NovaCivicRender.renderTicker; } },
+    { label: 'renderVotes',  fn: function(){ return typeof NovaCivicRender.renderVotes; } },
+  ]);
+} catch(e) { entry('❌ render.js runtime check failed: ' + e.message, 'fail', e.stack); }
+</script>
+
+<script src="js/app.js" onerror="entry('❌ FAILED TO LOAD: js/app.js', 'fail')"></script>
+
+<script>
+try {
+  if (!window.App) throw new Error('App is undefined after loading app.js');
+  checkAfterLoad('js/app.js', [
+    { label: 'App.init',          fn: function(){ return typeof App.init; } },
+    { label: 'App.switchCounty',  fn: function(){ return typeof App.switchCounty; } },
+    { label: 'App.selectDistrict',fn: function(){ return typeof App.selectDistrict; } },
+    { label: 'App.setScope',      fn: function(){ return typeof App.setScope; } },
+  ]);
+  entry('✅ All modules loaded. DOMContentLoaded will fire App.init() automatically.', 'ok');
+} catch(e) { entry('❌ app.js runtime check failed: ' + e.message, 'fail', e.stack); }
+</script>
+
+<!-- Now load Leaflet and try a real init -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div id="map" style="height:1px;width:1px;visibility:hidden"></div>
+<script>
+setTimeout(function() {
+  entry('--- Testing App.init() ---', 'info');
+  try {
+    App.init();
+    entry('✅ App.init() completed without throwing', 'ok');
+  } catch(e) {
+    entry('❌ App.init() THREW: ' + e.message, 'fail', e.stack);
+  }
+
+// Check counters updated
+setTimeout(function() {
+var s1 = document.getElementById(‘s1’);
+entry(s1 && s1.textContent !== ‘0’ ? ‘✅ Counters animated OK’ : ‘⚠️ Counters still at 0 — DOMContentLoaded may have already fired’, ‘warn’);
+entry(‘Diagnostic complete. Scroll up for any red errors.’, ‘info’);
+}, 800);
+}, 300);
+</script>
+
+</body>
+</html>
