@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -27,45 +26,42 @@ function entry(msg, type, detail) {
   var div = document.createElement('div');
   div.className = 'step ' + (type || 'info');
   div.innerHTML = msg + (detail ? '<pre>' + detail + '</pre>' : '');
-
-log.appendChild(div);
+  log.appendChild(div);
 }
 
 // Catch all uncaught errors
 window.onerror = function(msg, src, line, col, err) {
-entry(’UNCAUGHT ERROR in ’ + (src || ‘unknown’) + ’ line ’ + line, ‘fail’,
-msg + (err && err.stack ? ‘\n\n’ + err.stack : ‘’));
-return true;
+  entry('UNCAUGHT ERROR in ' + (src || 'unknown') + ' line ' + line, 'fail',
+    msg + (err && err.stack ? '\n\n' + err.stack : ''));
+  return true;
 };
 
-window.addEventListener(‘unhandledrejection’, function(e) {
-entry(‘UNHANDLED PROMISE REJECTION’, ‘fail’,
-e.reason ? (e.reason.message || String(e.reason)) : ‘unknown’);
+window.addEventListener('unhandledrejection', function(e) {
+  entry('UNHANDLED PROMISE REJECTION', 'fail',
+    e.reason ? (e.reason.message || String(e.reason)) : 'unknown');
 });
 
-entry(‘Starting diagnostic checks…’, ‘info’);
+entry('Starting diagnostic checks...', 'info');
 
 // Step 1: Check globals after each script loads
 function checkAfterLoad(name, checks) {
-var allOk = true;
-var results = [];
-checks.forEach(function(c) {
-try {
-var val = c.fn();
-results.push(‘OK: ’ + c.label + ’ = ’ + JSON.stringify(val).slice(0, 80));
-} catch(e) {
-results.push(‘FAIL: ’ + c.label + ’ threw: ’ + e.message);
-allOk = false;
-}
-});
-entry((allOk ? ‘✅’ : ‘❌’) + ’ ’ + name, allOk ? ‘ok’ : ‘fail’, results.join(’\n’));
+  var allOk = true;
+  var results = [];
+  checks.forEach(function(c) {
+    try {
+      var val = c.fn();
+      results.push('OK: ' + c.label + ' = ' + JSON.stringify(val).slice(0, 80));
+    } catch(e) {
+      results.push('FAIL: ' + c.label + ' threw: ' + e.message);
+      allOk = false;
+    }
+  });
+  entry((allOk ? '✅' : '❌') + ' ' + name, allOk ? 'ok' : 'fail', results.join('\n'));
 }
 </script>
 
 <!-- Load each script and check immediately after -->
-
 <script src="data/loudoun.js" onerror="entry('❌ FAILED TO LOAD: data/loudoun.js - file not found or parse error', 'fail')"></script>
-
 <script>
 try {
   if (!window.LOUDOUN) throw new Error('window.LOUDOUN is undefined after loading loudoun.js');
@@ -86,7 +82,6 @@ try {
 </script>
 
 <script src="data/fairfax.js" onerror="entry('❌ FAILED TO LOAD: data/fairfax.js', 'fail')"></script>
-
 <script>
 try {
   if (!window.FAIRFAX) throw new Error('window.FAIRFAX is undefined');
@@ -101,7 +96,6 @@ try {
 </script>
 
 <script src="js/api.js" onerror="entry('❌ FAILED TO LOAD: js/api.js - THIS IS LIKELY THE PROBLEM', 'fail')"></script>
-
 <script>
 try {
   if (!window.NovaCivicAPI) throw new Error('NovaCivicAPI is undefined after loading api.js');
@@ -115,7 +109,6 @@ try {
 </script>
 
 <script src="js/map.js" onerror="entry('❌ FAILED TO LOAD: js/map.js', 'fail')"></script>
-
 <script>
 try {
   if (!window.NovaCivicMap) throw new Error('NovaCivicMap is undefined');
@@ -128,7 +121,6 @@ try {
 </script>
 
 <script src="js/render.js" onerror="entry('❌ FAILED TO LOAD: js/render.js', 'fail')"></script>
-
 <script>
 try {
   if (!window.NovaCivicRender) throw new Error('NovaCivicRender is undefined');
@@ -141,7 +133,6 @@ try {
 </script>
 
 <script src="js/app.js" onerror="entry('❌ FAILED TO LOAD: js/app.js', 'fail')"></script>
-
 <script>
 try {
   if (!window.App) throw new Error('App is undefined after loading app.js');
@@ -156,9 +147,7 @@ try {
 </script>
 
 <!-- Now load Leaflet and try a real init -->
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <div id="map" style="height:1px;width:1px;visibility:hidden"></div>
 <script>
 setTimeout(function() {
@@ -170,12 +159,12 @@ setTimeout(function() {
     entry('❌ App.init() THREW: ' + e.message, 'fail', e.stack);
   }
 
-// Check counters updated
-setTimeout(function() {
-var s1 = document.getElementById(‘s1’);
-entry(s1 && s1.textContent !== ‘0’ ? ‘✅ Counters animated OK’ : ‘⚠️ Counters still at 0 — DOMContentLoaded may have already fired’, ‘warn’);
-entry(‘Diagnostic complete. Scroll up for any red errors.’, ‘info’);
-}, 800);
+  // Check counters updated
+  setTimeout(function() {
+    var s1 = document.getElementById('s1');
+    entry(s1 && s1.textContent !== '0' ? '✅ Counters animated OK' : '⚠️ Counters still at 0 — DOMContentLoaded may have already fired', 'warn');
+    entry('Diagnostic complete. Scroll up for any red errors.', 'info');
+  }, 800);
 }, 300);
 </script>
 
