@@ -7,7 +7,7 @@ var NovaCivicAPI = (function () {
   // ── WMATA key placeholder ─────────────────────────────────
   // Replace the string below with your WMATA primary key
   // before pushing to GitHub. Never commit a real key to a public repo.
-  var WMATA_KEY = 'YOUR_WMATA_PRIMARY_KEY_HERE';
+  var WMATA_KEY = 'f22e7e9d5f4b42569d3c369cf9e4f1e6';
 
   // Loudoun Silver Line station codes
   var LOUDOUN_STATIONS = [
