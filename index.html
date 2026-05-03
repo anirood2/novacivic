@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nova Civic - Northern Virginia Transparency Platform</title>
-<meta name="description" content="Real-time civic data for Loudoun and Fairfax counties. Live air quality, weather, water levels, WMATA train predictions, permits, and more. Free. Open source. No spin."/>
+<meta name="description" content="Real-time civic data for Loudoun and Fairfax counties. Live air quality, weather, water, WMATA train predictions, leadership, services, elections, FOIA, and more."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -19,9 +19,10 @@
   <div class="nav-links">
     <a class="nav-link" href="#map-section">MAP</a>
     <a class="nav-link" href="#dashboards">DATA</a>
+    <a class="nav-link" href="#leadership-section">GOVERNANCE</a>
+    <a class="nav-link" href="#community-section">COMMUNITY</a>
     <a class="nav-link" href="#sources">SOURCES</a>
     <a class="nav-link" href="#vote">VOTE</a>
-    <a class="nav-link" href="#about">ABOUT</a>
   </div>
 </nav>
 
@@ -42,16 +43,14 @@
   <div class="freshness-disclaimer">NOT AN OFFICIAL GOVERNMENT WEBSITE</div>
 </div>
 
-<!-- SILVER LINE INCIDENTS (hidden until incidents exist) -->
+<!-- INCIDENTS -->
 <div class="incidents-banner" id="incidentsBanner"></div>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-label" id="tickerLabel">LOUDOUN</div>
   <div class="ticker-track">
-    <div class="ticker-scroll" id="tickerScroll">
-      <span class="ticker-item">Loading live data...</span>
-    </div>
+    <div class="ticker-scroll" id="tickerScroll"><span class="ticker-item">Loading live data...</span></div>
   </div>
 </div>
 
@@ -61,25 +60,22 @@
   <div class="hero-badge">📍 <span id="heroBadge">Leesburg, VA</span></div>
   <h1>Your County.<br/><em>Your Data.</em><br/>Your Right.</h1>
   <p class="hero-sub" id="heroSub">Fastest growing county in Virginia. <strong>Real data. Zero spin. Free forever.</strong></p>
-
   <div class="stats-row">
-    <div class="stat-item">
-      <span class="stat-num" id="s1">0</span>
-      <span class="stat-label">Districts</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" id="s2">0</span>
-      <span class="stat-label">Dashboards</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" id="s3">0</span>
-      <span class="stat-label">Live APIs</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" id="s4">0</span>
-      <span class="stat-label">Open Sources</span>
-    </div>
+    <div class="stat-item"><span class="stat-num" id="s1">0</span><span class="stat-label">Population</span></div>
+    <div class="stat-item"><span class="stat-num" id="s2">0</span><span class="stat-label">Budget ($M)</span></div>
+    <div class="stat-item"><span class="stat-num" id="s3">0</span><span class="stat-label">Students</span></div>
+    <div class="stat-item"><span class="stat-num" id="s4">0</span><span class="stat-label">Home Price ($K)</span></div>
   </div>
+</section>
+
+<!-- LOCAL ALERTS -->
+<section class="section-wrap" id="alerts-section">
+  <div class="section-header">
+    <span class="section-title">LOCAL ALERTS</span>
+    <div class="section-line"></div>
+    <span class="section-title">COMMUNITY</span>
+  </div>
+  <div class="alerts-grid" id="alertsGrid"></div>
 </section>
 
 <!-- MAP -->
@@ -90,41 +86,94 @@
     <span class="section-title">CLICK DISTRICT OR STATION</span>
   </div>
   <div id="map"></div>
-  <p class="map-hint">
-    Click a district polygon to load its dashboards below.
-    Click a <span style="color:#b5a3e8">purple dot</span> for live Silver Line train predictions.
-  </p>
+  <p class="map-hint">Click a district polygon to load dashboards. Click a <span style="color:#b5a3e8">purple dot</span> for live Silver Line predictions.</p>
   <div class="district-chips" id="districtChips"></div>
 </section>
 
 <!-- DATA DISCLAIMER -->
-<div class="data-disclaimer">
-  <div id="dataDisclaimer"></div>
-</div>
+<div class="data-disclaimer"><div id="dataDisclaimer"></div></div>
 
 <!-- DASHBOARDS -->
 <section class="dashboard-section" id="dashboards">
   <div class="section-header">
-    <span class="section-title" id="dashTitle">DISTRICT DASHBOARDS</span>
+    <span class="section-title">DATA DASHBOARDS</span>
     <div class="section-line"></div>
     <span class="section-title">OPEN DATA</span>
   </div>
-
   <div id="districtHeader" class="district-header"></div>
-
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
     <div class="scope-toggle">
       <button class="scope-btn active" data-scope="county" onclick="App.setScope('county')">COUNTY</button>
       <button class="scope-btn" data-scope="district" onclick="App.setScope('district')">DISTRICT</button>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <span style="font-family:var(--mono);font-size:9px;padding:3px 8px;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);border-radius:2px;">LIVE = fetched this session</span>
-      <span style="font-family:var(--mono);font-size:9px;padding:3px 8px;background:rgba(0,198,255,0.08);color:#00c6ff;border:1px solid rgba(0,198,255,0.2);border-radius:2px;">TODAY = from open data API</span>
-      <span style="font-family:var(--mono);font-size:9px;padding:3px 8px;background:rgba(107,127,163,0.08);color:#6b7fa3;border:1px solid rgba(107,127,163,0.15);border-radius:2px;">PUB DATE = last published by source</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="legend-badge" style="background:rgba(34,197,94,0.1);color:#22c55e;border-color:rgba(34,197,94,0.2)">LIVE = fetched now</span>
+      <span class="legend-badge" style="background:rgba(0,198,255,0.08);color:#00c6ff;border-color:rgba(0,198,255,0.2)">TODAY = open data API</span>
+      <span class="legend-badge" style="background:rgba(107,127,163,0.08);color:#6b7fa3;border-color:rgba(107,127,163,0.15)">PUB = last published date</span>
     </div>
   </div>
-
   <div class="dashboard-grid" id="dashGrid"></div>
+</section>
+
+<!-- GOVERNANCE -->
+<section class="section-wrap" id="leadership-section">
+  <div class="section-header">
+    <span class="section-title">GOVERNANCE</span>
+    <div class="section-line"></div>
+    <span class="section-title">LEADERSHIP</span>
+  </div>
+  <div class="leaders-grid" id="leadershipGrid"></div>
+</section>
+
+<!-- ELECTIONS - inline card -->
+<section class="section-wrap" id="elections-section">
+  <div class="section-header">
+    <span class="section-title">ELECTIONS</span>
+    <div class="section-line"></div>
+    <span class="section-title">VOTER INFO</span>
+  </div>
+  <div class="elections-box">
+    <div class="elections-item">
+      <span class="elections-label">Last General Election</span>
+      <span class="elections-val">November 7, 2023</span>
+    </div>
+    <div class="elections-item">
+      <span class="elections-label">Next General Election</span>
+      <span class="elections-val" style="color:var(--accent)">November 2027</span>
+    </div>
+    <div class="elections-item">
+      <span class="elections-label">What was on the ballot</span>
+      <span class="elections-val">All 9 supervisors + Board Chair (At-Large)</span>
+    </div>
+    <div class="elections-item">
+      <span class="elections-label">Register / Check Status</span>
+      <span class="elections-val"><a href="https://vote.elections.virginia.gov" target="_blank" style="color:var(--accent)">vote.elections.virginia.gov</a></span>
+    </div>
+    <div class="elections-item">
+      <span class="elections-label">Virginia FOIA / Open Records</span>
+      <span class="elections-val"><a id="foiaLink" href="https://www.loudoun.gov/foia" target="_blank" style="color:var(--accent)">File a request online</a> · 5 business days to respond</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="section-wrap" id="community-section">
+  <div class="section-header">
+    <span class="section-title">COMMUNITY</span>
+    <div class="section-line"></div>
+    <span class="section-title">SERVICES DIRECTORY</span>
+  </div>
+  <div class="services-grid" id="servicesGrid"></div>
+</section>
+
+<!-- GOV SCHEMES / ASSISTANCE -->
+<section class="section-wrap" id="schemes-section">
+  <div class="section-header">
+    <span class="section-title">ASSISTANCE PROGRAMS</span>
+    <div class="section-line"></div>
+    <span class="section-title">ELIGIBILITY INFO</span>
+  </div>
+  <div class="schemes-grid" id="schemesGrid"></div>
 </section>
 
 <!-- HOW IT WORKS -->
@@ -136,40 +185,40 @@
   </div>
   <div class="how-grid">
     <div class="how-card">
-      <span class="how-num">01</span>
-      <span class="how-icon">📡</span>
+      <span class="how-num">01</span><span class="how-icon">📡</span>
       <div class="how-title">WE FETCH LIVE</div>
-      <div class="how-body">On every page load, we pull real data from EPA AirNow, NWS weather, USGS stream gauges, WMATA train predictions, and county open data portals. Live cards show a timestamp so you know exactly when data was pulled.</div>
+      <div class="how-body">On every page load we pull real data from EPA AirNow, NWS weather, USGS stream gauges, WMATA train predictions, Dominion Energy outages, and county open data portals. Live cards show a timestamp.</div>
     </div>
     <div class="how-card">
-      <span class="how-num">02</span>
-      <span class="how-icon">📋</span>
+      <span class="how-num">02</span><span class="how-icon">📋</span>
       <div class="how-title">WE LABEL HONESTLY</div>
-      <div class="how-body">Cards show exactly what they are: LIVE (fetched right now), TODAY (from open data API today), or PUBLISHED with the actual date the government last released that data. No fake daily or weekly badges on annual data.</div>
+      <div class="how-body">Cards show exactly what they are: LIVE, TODAY, or PUBLISHED with the actual date. Every card shows its collection method: LIVE API, OPEN DATA API, PDF, Collected, or Static. No fake update badges.</div>
     </div>
     <div class="how-card">
-      <span class="how-num">03</span>
-      <span class="how-icon">🔗</span>
+      <span class="how-num">03</span><span class="how-icon">🔗</span>
       <div class="how-title">WE LINK THE SOURCE</div>
-      <div class="how-body">Every card links directly to its source portal. Every number is traceable. Built by a Brambleton resident who was tired of digging through 12 government portals to find basic facts about their own county.</div>
+      <div class="how-body">Every card links to its source portal. Every number is traceable. Built by a Brambleton resident who was tired of digging through 12 government portals to find basic facts about their county.</div>
     </div>
   </div>
 </section>
 
-<!-- SOURCES -->
+<!-- SOURCES + DATA PLEDGE -->
 <section class="sources-section" id="sources">
   <div class="section-header">
     <span class="section-title">DATA SOURCES</span>
     <div class="section-line"></div>
     <span class="section-title">FULL TRANSPARENCY</span>
   </div>
-  <div class="sources-intro">
+  <!-- Data Pledge -->
+  <div id="dataPledge" class="data-pledge-wrap"></div>
+
+  <div class="sources-intro" style="margin-top:16px;">
     <div class="sources-intro-text">
       Every number traces back to a <strong>public record or live government API</strong>.
       Click any source to open the original portal.
       If you spot a discrepancy, <a href="mailto:hello@novacivic.org">flag it</a>.
     </div>
-    <div class="sources-count" id="sourcesCount">13 SOURCES</div>
+    <div class="sources-count" id="sourcesCount">15 SOURCES</div>
   </div>
   <div class="sources-filter-row">
     <button class="filter-btn active" onclick="App.filterSources('all', this)">ALL</button>
@@ -180,7 +229,9 @@
     <button class="filter-btn" onclick="App.filterSources('housing', this)">HOUSING</button>
     <button class="filter-btn" onclick="App.filterSources('budget', this)">BUDGET</button>
     <button class="filter-btn" onclick="App.filterSources('transit', this)">TRANSIT</button>
-    <button class="filter-btn" onclick="App.filterSources('environment', this)">ENV</button>
+    <button class="filter-btn" onclick="App.filterSources('governance', this)">GOVERNANCE</button>
+    <button class="filter-btn" onclick="App.filterSources('utilities', this)">UTILITIES</button>
+    <button class="filter-btn" onclick="App.filterSources('safety', this)">SAFETY</button>
   </div>
   <div class="sources-grid" id="sourcesGrid"></div>
 </section>
@@ -199,9 +250,9 @@
 <section class="cta-section" id="about">
   <div class="cta-box">
     <div class="cta-title">Built by a resident.<br/>For every resident.</div>
-    <p class="cta-sub">Started by one person in Brambleton, VA. Real APIs. Honest labels. No spin. Covering Loudoun and Fairfax - with more coming.</p>
+    <p class="cta-sub">Started by one person in Brambleton, VA. Real APIs. Honest labels. No spin. Covering Loudoun and Fairfax.</p>
     <div class="btn-row">
-      <a class="btn btn-primary" href="https://github.com" target="_blank">Star on GitHub</a>
+      <a class="btn btn-primary" href="https://github.com/anirood2/novacivic" target="_blank">Star on GitHub</a>
       <a class="btn btn-ghost" href="#vote">Vote on Features</a>
       <a class="btn btn-ghost" href="mailto:hello@novacivic.org">Contribute Data</a>
     </div>
@@ -214,14 +265,15 @@
   <div class="footer-links">
     <a class="footer-link" href="#about">About</a>
     <a class="footer-link" href="#sources">Sources</a>
-    <a class="footer-link" href="#">Privacy</a>
-    <a class="footer-link" href="#">GitHub</a>
+    <a class="footer-link" href="#leadership-section">Leadership</a>
+    <a class="footer-link" href="#community-section">Services</a>
+    <a class="footer-link" href="https://github.com/anirood2/novacivic" target="_blank">GitHub</a>
     <a class="footer-link" href="mailto:hello@novacivic.org">Contact</a>
   </div>
   <div class="footer-built">Built by a Brambleton resident · Loudoun + Fairfax · Live data on every load</div>
 </footer>
 
-<!-- SCRIPTS: load order matters -->
+<!-- SCRIPTS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="data/loudoun.js"></script>
 <script src="data/fairfax.js"></script>
@@ -229,6 +281,5 @@
 <script src="js/map.js"></script>
 <script src="js/render.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 </html>
